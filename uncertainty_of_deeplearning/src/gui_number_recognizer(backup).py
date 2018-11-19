@@ -2,13 +2,16 @@
 # -*- coding: utf-8 -*-
 
 """
-This program creates a Number-Recognizer.
+ZetCode PyQt5 tutorial
 
-Author: Taemin Choi
-Email: choitm0707@kist.re.kr
-Last edited: November 2018
+This program creates a submenu.
+
+Author: Jan Bodnar
+Website: zetcode.com
+Last edited: August 2017
 """
 
+import os
 import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
@@ -17,6 +20,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from PIL import Image
 from PIL import ImageQt
 import numpy as np
+import tensorflow as tf
 
 class MainWindow(QMainWindow):
 
@@ -73,7 +77,7 @@ class FormWidget(QWidget):
 
     def __init__(self, parent):
         super(FormWidget, self).__init__(parent)
-        self.image_path = "/home/taemin/s-hri_ws/src/uncertainty_for_robot/uncertainty_of_deeplearning/src/images/kist.jpg"
+        self.image_path = "/home/taemin/images/kist.jpg"
         self.image_array = []
         self.image = Image.open(self.image_path)
         self.init_widget()
