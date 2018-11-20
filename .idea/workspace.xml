@@ -2,49 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f97cc03d-9219-446e-9387-6193553c3dd7" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/uncertainty_of_deeplearning/src/classifier_number.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uncertainty_of_deeplearning/src/gui_classifier_number.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uncertainty_of_deeplearning/src/test.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/uncertainty_of_deeplearning/src/gui_number_recognizer.py" beforeDir="false" afterPath="$PROJECT_DIR$/uncertainty_of_deeplearning/src/gui_number_recognizer.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="DockManager">
-    <window id="1">
-      <content type="file-editors">
-        <state>
-          <leaf>
-            <file pinned="false" current-in-tab="true">
-              <entry file="file://$PROJECT_DIR$/uncertainty_of_deeplearning/src/number_recognizer.py">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="-4025">
-                    <caret line="17" column="23" selection-start-line="17" selection-start-column="23" selection-end-line="17" selection-end-column="23" />
-                    <folding>
-                      <element signature="e#21#30#0" expanded="true" />
-                    </folding>
-                  </state>
-                </provider>
-              </entry>
-            </file>
-            <file pinned="false" current-in-tab="false">
-              <entry file="file://$PROJECT_DIR$/uncertainty_of_deeplearning/src/gui_number_recognizer(backup).py">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="3519">
-                    <caret line="153" column="47" lean-forward="true" selection-start-line="153" selection-start-column="47" selection-end-line="153" selection-end-column="47" />
-                    <folding>
-                      <element signature="e#175#184#0" expanded="true" />
-                    </folding>
-                  </state>
-                </provider>
-              </entry>
-            </file>
-          </leaf>
-        </state>
-      </content>
-    </window>
   </component>
   <component name="FUSProjectUsageTrigger">
     <session id="1954650335">
@@ -53,8 +18,9 @@
           <entry key="project.closed" value="4" />
           <entry key="project.open.time.0" value="2" />
           <entry key="project.open.time.2" value="1" />
-          <entry key="project.open.time.3" value="11" />
-          <entry key="project.opened" value="14" />
+          <entry key="project.open.time.3" value="14" />
+          <entry key="project.open.time.8" value="1" />
+          <entry key="project.opened" value="18" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -69,13 +35,13 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="9118" />
+          <entry key="py" value="10191" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="9118" />
+          <entry key="Python" value="10191" />
         </counts>
       </usages-collector>
     </session>
@@ -85,7 +51,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/uncertainty_of_deeplearning/src/mnist_nn_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4370">
+            <state relative-caret-position="4232">
               <caret line="190" column="21" selection-start-line="190" selection-start-column="4" selection-end-line="190" selection-end-column="21" />
               <folding>
                 <element signature="e#21#30#0" expanded="true" />
@@ -97,11 +63,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/uncertainty_of_deeplearning/src/gui_number_recognizer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="582">
-              <caret line="316" column="55" selection-start-line="316" selection-start-column="55" selection-end-line="316" selection-end-column="55" />
+            <state relative-caret-position="283">
+              <caret line="333" column="42" selection-start-line="333" selection-start-column="42" selection-end-line="333" selection-end-column="42" />
               <folding>
                 <element signature="e#172#181#0" expanded="true" />
-                <marker date="1542608732821" expanded="true" signature="10863:11670" ph="..." />
+                <marker date="1542725828131" expanded="true" signature="10898:13613" ph="..." />
               </folding>
             </state>
           </provider>
@@ -133,16 +99,17 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="2453" />
-    <option name="y" value="24" />
-    <option name="width" value="926" />
-    <option name="height" value="1048" />
+    <option name="x" value="65" />
+    <option name="y" value="-4" />
+    <option name="width" value="1855" />
+    <option name="height" value="1084" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -165,7 +132,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -226,10 +192,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1985" y="-4" width="1855" height="1084" extended-state="6" />
+    <frame x="64" y="-11" width="1857" height="1092" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.125" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.12445415" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -264,54 +230,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/uncertainty_of_deeplearning/src/gui_classifier_number.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="858">
-          <caret line="77" column="32" selection-start-line="77" selection-start-column="32" selection-end-line="77" selection-end-column="32" />
-          <folding>
-            <element signature="e#175#185#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/uncertainty_of_deeplearning/src/classifier_number.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="23">
-          <caret line="38" column="19" selection-start-line="38" selection-start-column="8" selection-end-line="38" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/uncertainty_of_deeplearning/src/test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="368">
-          <caret line="16" column="21" lean-forward="true" selection-start-line="16" selection-start-column="21" selection-end-line="16" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/uncertainty_of_deeplearning/src/mnist_nn_model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4370">
-          <caret line="190" column="21" selection-start-line="190" selection-start-column="4" selection-end-line="190" selection-end-column="21" />
-          <folding>
-            <element signature="e#21#30#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/uncertainty_of_deeplearning/src/gui_classifier_number.py" />
+    <entry file="file://$PROJECT_DIR$/uncertainty_of_deeplearning/src/classifier_number.py" />
+    <entry file="file://$PROJECT_DIR$/uncertainty_of_deeplearning/src/test.py" />
     <entry file="file://$PROJECT_DIR$/uncertainty_of_deeplearning/src/gui_number_recognizer(backup).py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3519">
-          <caret line="153" column="47" lean-forward="true" selection-start-line="153" selection-start-column="47" selection-end-line="153" selection-end-column="47" />
-          <folding>
-            <element signature="e#175#184#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="3312">
+          <caret line="153" column="47" selection-start-line="153" selection-start-column="47" selection-end-line="153" selection-end-column="47" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/uncertainty_of_deeplearning/src/number_recognizer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4025">
-          <caret line="17" column="23" selection-start-line="17" selection-start-column="23" selection-end-line="17" selection-end-column="23" />
+        <state relative-caret-position="-1761">
+          <caret line="127" column="51" lean-forward="true" selection-start-line="127" selection-start-column="51" selection-end-line="127" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/uncertainty_of_deeplearning/src/mnist_nn_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4232">
+          <caret line="190" column="21" selection-start-line="190" selection-start-column="4" selection-end-line="190" selection-end-column="21" />
           <folding>
             <element signature="e#21#30#0" expanded="true" />
           </folding>
@@ -320,11 +259,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/uncertainty_of_deeplearning/src/gui_number_recognizer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="582">
-          <caret line="316" column="55" selection-start-line="316" selection-start-column="55" selection-end-line="316" selection-end-column="55" />
+        <state relative-caret-position="283">
+          <caret line="333" column="42" selection-start-line="333" selection-start-column="42" selection-end-line="333" selection-end-column="42" />
           <folding>
             <element signature="e#172#181#0" expanded="true" />
-            <marker date="1542608732821" expanded="true" signature="10863:11670" ph="..." />
+            <marker date="1542725828131" expanded="true" signature="10898:13613" ph="..." />
           </folding>
         </state>
       </provider>

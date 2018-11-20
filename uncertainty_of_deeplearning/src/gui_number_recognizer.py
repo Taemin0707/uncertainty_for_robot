@@ -37,6 +37,8 @@ class NumberRecognizer(object):
         self.test_input = np.reshape(self.test_input, (-1, 784))
         print("테스트 이미지 = ", self.test_input.shape)
 
+        tf.reset_default_graph()
+
         # input place holders
         X = tf.placeholder(tf.float32, [None, 784])
 
@@ -74,6 +76,7 @@ class NumberRecognizer(object):
         hypothesis = tf.nn.softmax(tf.matmul(L4, W5) + b5)
 
         with tf.Session() as sess:
+
             save_path = './models/classifier_number_model'
             new_saver = tf.train.Saver()
             new_saver.restore(sess, save_path)
@@ -300,14 +303,21 @@ class FormWidget(QWidget):
     def calculate_button_clicked(self):
         (mean, variance) = self.number_recognizer.predict_with_dropout(self.image)
         sorted_mean = np.sort(mean)
-        print(sorted_mean)
+        # print(sorted_mean)
         first_number = np.where(mean == sorted_mean[9])
         first_number = first_number[0][0]
+        mean_first_number = mean[first_number]
+        var_first_number = variance[first_number]
         second_number = np.where(mean == sorted_mean[8])
         second_number = second_number[0][0]
+        mean_second_number = mean[second_number]
+        var_second_number = variance[second_number]
         third_number = np.where(mean == sorted_mean[7])
         third_number = third_number[0][0]
+        mean_third_number = mean[third_number]
+        var_third_number = variance[third_number]
 
+        # 텍스트 브라우저
         self.text.clear()
         self.text.append("인식 결과는 다음과 같습니다.")
         self.text.append("인식된 숫자는 = {}".format(first_number))
@@ -315,6 +325,44 @@ class FormWidget(QWidget):
         self.text.append("1st = {}".format(first_number))
         self.text.append("2nd = {}".format(second_number))
         self.text.append("3rd = {}".format(third_number))
+
+        # 그래프 관련
+        n_groups = 3
+        means = (mean_first_number, mean_second_number, mean_third_number)
+        variances = (var_first_number, var_second_number, var_third_number)
+
+        ax = self.fig.add_subplot(1, 1, 1)
+        index = np.arange(n_groups)
+
+        # 막대 사이의 거리
+        bar_width = 0.3
+
+        # 막대 그래프
+        rect1 = ax.bar(0, mean_first_number, bar_width, yerr=var_first_number, capsize=3, ecolor='r', label='First')
+        rect2 = ax.bar(1, mean_second_number, bar_width, yerr=var_second_number, capsize=3, ecolor='r', label='Second')
+        rect3 = ax.bar(2, mean_third_number, bar_width, yerr=var_third_number, capsize=3, ecolor='r', label='Third')
+        # rect = ax.bar(index, means, bar_width, yerr=variances, capsize=3, ecolor='r', label='Top3 of Numbers')
+        ax.set_xlabel('Number')
+        ax.set_ylabel('Softmax result')
+        ax.set_title('Uncertainty')
+        # ax.set_xticks(index, ('{}'.format(first_number), '{}'.format(second_number), '{}'.format(third_number)))
+        ax.set_xticks(index)
+        x_labels = [first_number, second_number, third_number]
+        ax.set_xticklabels(x_labels)
+        ax.legend()
+        self.canvas.draw()
+        ax.clear()
+        # ax = self.fig.add_subplot(1, 1, 1)
+        # graph_x1 = [1]
+        # graph_x2 = [2]
+        # graph_x3 = [3]
+        # graph_y1 = [1]
+        # graph_y2 = [2]
+        # graph_y3 = [3]
+        # ax.plot(graph_x1, graph_y1, 'C0', lw=2)
+        # ax.plot(graph_x2, graph_y2, 'C0', lw=2)
+        # ax.plot(graph_x3, graph_y3, 'C0', lw=2)
+        # self.canvas.draw()
 
         # print(type(image))
 
