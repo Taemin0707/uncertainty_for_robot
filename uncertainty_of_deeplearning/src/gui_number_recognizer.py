@@ -11,6 +11,7 @@ Last edited: November 2018
 
 import os
 import sys
+import time
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 import matplotlib.pyplot as plt
@@ -292,7 +293,16 @@ class FormWidget(QWidget):
         print("회전 완료")
 
     def rotate_right_button_clicked(self):
+        origin_w, origin_h = self.image.size
         self.image = self.image.rotate(-15)
+        # self.image = self.image.rotate(-15, expand=True)
+        # rotated_w, rotated_h = self.image.size
+        # target_area_x1 = ((rotated_w / 2) - (origin_w / 2))
+        # target_area_x2 = ((rotated_w / 2) + (origin_w / 2))
+        # target_area_y1 = ((rotated_h / 2) - (origin_h / 2))
+        # target_area_y2 = ((rotated_h / 2) + (origin_h / 2))
+        # target_area =
+        # self.image.crop(rotated_w / 2 -)
         new_image = ImageQt.ImageQt(self.image)
         new_image = QImage(new_image)
         pixmap = QPixmap.fromImage(new_image)
@@ -301,6 +311,8 @@ class FormWidget(QWidget):
         print("회전 완료")
 
     def calculate_button_clicked(self):
+        # 시간 측정
+        start_time = time.time()
         (mean, variance) = self.number_recognizer.predict_with_dropout(self.image)
         sorted_mean = np.sort(mean)
         # print(sorted_mean)
@@ -317,14 +329,18 @@ class FormWidget(QWidget):
         mean_third_number = mean[third_number]
         var_third_number = variance[third_number]
 
+        # 시간 측정 종료
+        print("--- %s seconds ---" % (time.time() - start_time))
+
         # 텍스트 브라우저
         self.text.clear()
         self.text.append("인식 결과는 다음과 같습니다.")
-        self.text.append("인식된 숫자는 = {}".format(first_number))
+        self.text.append("인식된 숫자 = {}".format(first_number))
         self.text.append("후보 3개는 다음과 같습니다.")
         self.text.append("1st = {}".format(first_number))
         self.text.append("2nd = {}".format(second_number))
         self.text.append("3rd = {}".format(third_number))
+        self.text.append("계산 소요 시간 %s seconds" % (time.time() - start_time))
 
         # 그래프 관련
         n_groups = 3
@@ -342,11 +358,11 @@ class FormWidget(QWidget):
         rect2 = ax.bar(1, mean_second_number, bar_width, yerr=var_second_number, capsize=3, ecolor='r', label='Second')
         rect3 = ax.bar(2, mean_third_number, bar_width, yerr=var_third_number, capsize=3, ecolor='r', label='Third')
         # rect = ax.bar(index, means, bar_width, yerr=variances, capsize=3, ecolor='r', label='Top3 of Numbers')
-        ax.set_xlabel('Number')
-        ax.set_ylabel('Softmax result')
-        ax.set_title('Uncertainty')
+        ax.set_xlabel('Number', 400)
+        ax.set_ylabel('Softmax result', 50)
+        ax.set_title('Uncertainty', 20)
         # ax.set_xticks(index, ('{}'.format(first_number), '{}'.format(second_number), '{}'.format(third_number)))
-        ax.set_xticks(index)
+        ax.set_xticks()
         x_labels = [first_number, second_number, third_number]
         ax.set_xticklabels(x_labels)
         ax.legend()
@@ -365,6 +381,8 @@ class FormWidget(QWidget):
         # self.canvas.draw()
 
         # print(type(image))
+
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
