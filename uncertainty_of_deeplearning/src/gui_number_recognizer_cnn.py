@@ -13,6 +13,7 @@ import os
 import sys
 import time
 from PyQt5.QtWidgets import *
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import *
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -256,6 +257,7 @@ class FormWidget(QWidget):
         self.main_image = Image.open(self.main_image_path)
         self.init_widget()
         self.number_recognizer = NumberRecognizer()
+        self.rectangle_size = 28
 
     def init_widget(self):
         # 이미지 라벨
@@ -264,29 +266,62 @@ class FormWidget(QWidget):
         self.main_image_label.setPixmap(pixmap)
         self.main_image_label.resize(pixmap.width(), pixmap.height())
 
+        # 박스크기 정하는 슬라이드 위젯
+        self.slide = QSlider(Qt.Horizontal)
+        self.slide.setMinimum(10)
+        self.slide.setMaximum(50)
+        self.slide.setValue(28)
+        self.slide.setTickPosition(QSlider.TicksBelow)
+        self.slide.setTickInterval(5)
+        self.slide.setFocusPolicy(Qt.NoFocus)
+        self.slide.valueChanged.connect(self.change_slide_value)
+
+        # 박스크기를 보여주는 위젯
+        self.text_label = QLabel("Box Size = ")
+        self.box_size_label = QLabel("28", self)
+
         # 버튼
         self.rotate_left = QPushButton("Rotate Left")
         self.new_image = QPushButton("New Image")
         self.rotate_right = QPushButton("Rotate Right")
 
-        self.nope_1 = QPushButton("")
+        self.draw = QPushButton("Draw_Rectangle")
         self.move_up = QPushButton("Move Up")
-        self.nope_2 = QPushButton("")
+        self.crop = QPushButton("Crop_image")
 
         self.move_left = QPushButton("Move Left")
         self.calculate = QPushButton("Calculate")
         self.move_right = QPushButton("Move Right")
 
-        self.nope_3 = QPushButton("")
+        self.init = QPushButton("Init_Rectangle")
         self.move_down = QPushButton("Move Down")
-        self.nope_4 = QPushButton("")
+        self.sweep = QPushButton("Sweep")
+        self.save = QPushButton("Save")
+
+        self.nope1 = QPushButton("")
+        self.nope2 = QPushButton("")
+        self.nope3 = QPushButton("")
+        self.nope4 = QPushButton("")
 
         # 버튼 이벤트 처리
+        # 이미지 회전
         self.rotate_left.clicked.connect(self.rotate_left_button_clicked)
-        self.new_image.clicked.connect(self.new_image_button_clicked)
         self.rotate_right.clicked.connect(self.rotate_right_button_clicked)
+        # 이미지 불러오기
+        self.new_image.clicked.connect(self.new_image_button_clicked)
+        # 사각형 안 이미지 계산하기
         self.calculate.clicked.connect(self.calculate_button_clicked)
+        # 사각형 움직이기
         self.move_up.clicked.connect(self.move_up_button_clicked)
+        self.move_down.clicked.connect(self.move_down_button_clicked)
+        self.move_left.clicked.connect(self.move_left_button_clicked)
+        self.move_right.clicked.connect(self.move_right_button_clicked)
+        # 사각형 이미지 처리
+        self.draw.clicked.connect(self.draw_button_clicked)
+        self.crop.clicked.connect(self.crop_button_clicked)
+        self.init.clicked.connect(self.init_button_clicked)
+        self.sweep.clicked.connect(self.sweep_button_clicked)
+        self.save.clicked.connect(self.save_button_clicked)
 
         # 그래프
         self.fig = plt.Figure()
@@ -304,9 +339,9 @@ class FormWidget(QWidget):
         self.left_1_button_layout.addWidget(self.rotate_right)
 
         self.left_2_button_layout = QHBoxLayout()
-        self.left_2_button_layout.addWidget(self.nope_1)
+        self.left_2_button_layout.addWidget(self.nope1)
         self.left_2_button_layout.addWidget(self.move_up)
-        self.left_2_button_layout.addWidget(self.nope_2)
+        self.left_2_button_layout.addWidget(self.nope2)
 
         self.left_3_button_layout = QHBoxLayout()
         self.left_3_button_layout.addWidget(self.move_left)
@@ -314,16 +349,31 @@ class FormWidget(QWidget):
         self.left_3_button_layout.addWidget(self.move_right)
 
         self.left_4_button_layout = QHBoxLayout()
-        self.left_4_button_layout.addWidget(self.nope_3)
+        self.left_4_button_layout.addWidget(self.nope3)
         self.left_4_button_layout.addWidget(self.move_down)
-        self.left_4_button_layout.addWidget(self.nope_4)
+        self.left_4_button_layout.addWidget(self.nope4)
+
+        self.left_5_button_layout = QHBoxLayout()
+        self.left_5_button_layout.addWidget(self.draw)
+        self.left_5_button_layout.addWidget(self.crop)
+        self.left_5_button_layout.addWidget(self.init)
+        self.left_5_button_layout.addWidget(self.sweep)
+        self.left_5_button_layout.addWidget(self.save)
+
+        self.slide_layout = QHBoxLayout()
+        self.slide_layout.addWidget(self.slide)
+        self.slide_layout.addWidget(self.text_label)
+        self.slide_layout.addWidget(self.box_size_label)
 
         self.left_layout = QVBoxLayout()
         self.left_layout.addWidget(self.main_image_label)
+        self.left_layout.addLayout(self.slide_layout)
         self.left_layout.addLayout(self.left_1_button_layout)
         self.left_layout.addLayout(self.left_2_button_layout)
         self.left_layout.addLayout(self.left_3_button_layout)
         self.left_layout.addLayout(self.left_4_button_layout)
+        self.left_layout.addLayout(self.left_5_button_layout)
+
 
         self.right_layout = QVBoxLayout()
         self.right_layout.addWidget(self.text)
@@ -365,10 +415,12 @@ class FormWidget(QWidget):
         self.main_image_label.resize(pixmap.width(), pixmap.height())
         print("회전 완료")
 
-    def draw_rectangle(self):
+    def draw_button_clicked(self):
+        self.main_image = Image.open(self.main_image_path)
         main_image = self.main_image
+        size = self.rectangle_size / 2
         width, height = main_image.size
-        self.vertex_of_rect = [(width / 2) - 14, (height / 2) - 14, (width / 2) + 14, (height / 2) + 14]
+        self.vertex_of_rect = [(width / 2) - size, (height / 2) - size, (width / 2) + size, (height / 2) + size]
         image_draw = ImageDraw.Draw(main_image)
         image_draw.rectangle(((self.vertex_of_rect[0], self.vertex_of_rect[1]), \
                               (self.vertex_of_rect[2], self.vertex_of_rect[3])), outline='green')
@@ -377,7 +429,12 @@ class FormWidget(QWidget):
         pixmap = QPixmap.fromImage(new_image)
         self.main_image_label.setPixmap(pixmap)
         self.main_image_label.resize(pixmap.width(), pixmap.height())
-        main_image.show()
+
+    def crop_button_clicked(self):
+        crop_area = (int(self.vertex_of_rect[0]), int(self.vertex_of_rect[1]), int(self.vertex_of_rect[2]), int(self.vertex_of_rect[3]))
+        self.cropped_image = self.main_image.crop(crop_area)
+        self.cropped_image = self.cropped_image.convert('L')
+        self.cropped_image.show()
 
     def move_up_button_clicked(self):
         self.main_image = Image.open(self.main_image_path)
@@ -385,17 +442,166 @@ class FormWidget(QWidget):
         self.vertex_of_rect[3] = self.vertex_of_rect[3] - 1
         image_draw = ImageDraw.Draw(self.main_image)
         image_draw.rectangle(((self.vertex_of_rect[0], self.vertex_of_rect[1]), \
-                              (self.vertex_of_rect[2], self.vertex_of_rect[3])), outline='red')
+                              (self.vertex_of_rect[2], self.vertex_of_rect[3])), outline='yellow')
         new_image = ImageQt.ImageQt(self.main_image)
         new_image = QImage(new_image)
         pixmap = QPixmap.fromImage(new_image)
         self.main_image_label.setPixmap(pixmap)
         self.main_image_label.resize(pixmap.width(), pixmap.height())
 
+    def move_down_button_clicked(self):
+        self.main_image = Image.open(self.main_image_path)
+        self.vertex_of_rect[1] = self.vertex_of_rect[1] + 1
+        self.vertex_of_rect[3] = self.vertex_of_rect[3] + 1
+        image_draw = ImageDraw.Draw(self.main_image)
+        image_draw.rectangle(((self.vertex_of_rect[0], self.vertex_of_rect[1]), \
+                                (self.vertex_of_rect[2], self.vertex_of_rect[3])), outline='yellow')
+        new_image = ImageQt.ImageQt(self.main_image)
+        new_image = QImage(new_image)
+        pixmap = QPixmap.fromImage(new_image)
+        self.main_image_label.setPixmap(pixmap)
+        self.main_image_label.resize(pixmap.width(), pixmap.height())
+
+    def move_left_button_clicked(self):
+        self.main_image = Image.open(self.main_image_path)
+        self.vertex_of_rect[0] = self.vertex_of_rect[0] - 1
+        self.vertex_of_rect[2] = self.vertex_of_rect[2] - 1
+        image_draw = ImageDraw.Draw(self.main_image)
+        image_draw.rectangle(((self.vertex_of_rect[0], self.vertex_of_rect[1]), \
+                                (self.vertex_of_rect[2], self.vertex_of_rect[3])), outline='yellow')
+        new_image = ImageQt.ImageQt(self.main_image)
+        new_image = QImage(new_image)
+        pixmap = QPixmap.fromImage(new_image)
+        self.main_image_label.setPixmap(pixmap)
+        self.main_image_label.resize(pixmap.width(), pixmap.height())
+
+    def move_right_button_clicked(self):
+        self.main_image = Image.open(self.main_image_path)
+        self.vertex_of_rect[0] = self.vertex_of_rect[0] + 1
+        self.vertex_of_rect[2] = self.vertex_of_rect[2] + 1
+        image_draw = ImageDraw.Draw(self.main_image)
+        image_draw.rectangle(((self.vertex_of_rect[0], self.vertex_of_rect[1]), \
+                                (self.vertex_of_rect[2], self.vertex_of_rect[3])), outline='yellow')
+        new_image = ImageQt.ImageQt(self.main_image)
+        new_image = QImage(new_image)
+        pixmap = QPixmap.fromImage(new_image)
+        self.main_image_label.setPixmap(pixmap)
+        self.main_image_label.resize(pixmap.width(), pixmap.height())
+    
+    def change_slide_value(self, value):
+        self.rectangle_size = value
+        self.box_size_label.setText("{}".format(self.rectangle_size))
+        self.draw_button_clicked()
+        print(self.rectangle_size)
+
+    def init_button_clicked(self):
+        self.main_image = Image.open(self.main_image_path)
+        main_image = self.main_image
+        size = self.rectangle_size
+        width, height = main_image.size
+        self.vertex_of_rect = [0, 0, size, size]
+        image_draw = ImageDraw.Draw(main_image)
+        image_draw.rectangle(((self.vertex_of_rect[0], self.vertex_of_rect[1]), \
+                              (self.vertex_of_rect[2], self.vertex_of_rect[3])), outline='green')
+        new_image = ImageQt.ImageQt(main_image)
+        new_image = QImage(new_image)
+        pixmap = QPixmap.fromImage(new_image)
+        self.main_image_label.setPixmap(pixmap)
+        self.main_image_label.resize(pixmap.width(), pixmap.height())
+
+    def sweep_button_clicked(self):
+        self.main_image = Image.open(self.main_image_path)
+        self.start_point = self.vertex_of_rect[0]
+        image_draw = ImageDraw.Draw(self.main_image)
+        image_draw.rectangle(((self.vertex_of_rect[0], self.vertex_of_rect[1]), \
+                              (self.vertex_of_rect[2], self.vertex_of_rect[3])), outline='yellow')
+        new_image = ImageQt.ImageQt(self.main_image)
+        new_image = QImage(new_image)
+        pixmap = QPixmap.fromImage(new_image)
+        self.main_image_label.setPixmap(pixmap)
+        self.main_image_label.resize(pixmap.width(), pixmap.height())
+        crop_area = (int(self.vertex_of_rect[0]), int(self.vertex_of_rect[1]), int(self.vertex_of_rect[2]), int(self.vertex_of_rect[3]))
+        self.cropped_image = self.main_image.crop(crop_area)
+        self.cropped_image = self.cropped_image.convert('L')
+        self.cropped_image.save('./sweep_images/{}'.format(self.vertex_of_rect[0]))
+        # Lists for plot
+        self.mean_data_list = []
+        self.variance_data_list = []
+        (mean, variance) = self.number_recognizer.predict_with_dropout(self.cropped_image)
+        self.mean_data_list.append(mean)
+        self.variance_data_list.append(variance)
+
+        width, height = self.main_image.size
+        if self.vertex_of_rect[2] + 1 <= width:
+            self.vertex_of_rect[0] = self.vertex_of_rect[0] + 1
+            self.vertex_of_rect[2] = self.vertex_of_rect[2] + 1
+        else:
+            self.save_button_clicked()
+
+    def save_button_clicked(self):
+        # 그래프 관련
+        mean_zero = []
+        mean_one = []
+        mean_two = []
+        mean_three = [] 
+        mean_four = []
+        mean_five = []
+        mean_six = []
+        mean_seven = [] 
+        mean_eight = []
+        mean_nine = []
+
+        if len(self.mean_data_list) == 1:
+            self.calculate_button_clicked()
+        else:
+            for i in range(len(self.mean_data_list)):
+                mean_zero.append(self.mean_data_list[i][0])
+                mean_one.append(self.mean_data_list[i][1])
+                mean_two.append(self.mean_data_list[i][2])
+                mean_three.append(self.mean_data_list[i][3])
+                mean_four.append(self.mean_data_list[i][4])
+                mean_five.append(self.mean_data_list[i][5])
+                mean_six.append(self.mean_data_list[i][6])
+                mean_seven.append(self.mean_data_list[i][7])
+                mean_eight.append(self.mean_data_list[i][8])
+                mean_nine.append(self.mean_data_list[i][9])
+                
+                mean_zero.append(self.mean_data_list[i][0])
+                mean_one.append(self.mean_data_list[i][1])
+                mean_two.append(self.mean_data_list[i][2])
+                mean_three.append(self.mean_data_list[i][3])
+                mean_four.append(self.mean_data_list[i][4])
+                mean_five.append(self.mean_data_list[i][5])
+                mean_six.append(self.mean_data_list[i][6])
+                mean_seven.append(self.mean_data_list[i][7])
+                mean_eight.append(self.mean_data_list[i][8])
+                mean_nine.append(self.mean_data_list[i][9])
+
+        index
+        ax = self.fig.add_subplot(1, 1, 1)
+        index = np.arange(n_groups)
+
+        # 막대 사이의 거리
+        bar_width = 0.3
+
+        # 막대 그래프
+        rect1 = ax.bar(0, mean_first_number, bar_width, yerr=var_first_number, capsize=3, ecolor='r', label='First')
+        rect2 = ax.bar(1, mean_second_number, bar_width, yerr=var_second_number, capsize=3, ecolor='r', label='Second')
+        rect3 = ax.bar(2, mean_third_number, bar_width, yerr=var_third_number, capsize=3, ecolor='r', label='Third')
+        ax.set_xlabel('Number')
+        ax.set_ylabel('Softmax result')
+        ax.set_title('Uncertainty')
+        ax.set_xticks(index)
+        x_labels = [first_number, second_number, third_number]
+        ax.set_xticklabels(x_labels)
+        ax.legend()
+        self.canvas.draw()
+        ax.clear()
+
     def calculate_button_clicked(self):
         # 시간 측정
         start_time = time.time()
-        (mean, variance) = self.number_recognizer.predict_with_dropout(self.main_image)
+        (mean, variance) = self.number_recognizer.predict_with_dropout(self.cropped_image)
         sorted_mean = np.sort(mean)
         # print(sorted_mean)
         first_number = np.where(mean == sorted_mean[9])
