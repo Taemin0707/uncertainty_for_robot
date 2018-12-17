@@ -258,6 +258,9 @@ class FormWidget(QWidget):
         self.init_widget()
         self.number_recognizer = NumberRecognizer()
         self.rectangle_size = 28
+        # sweep 정보 저장을 위한 빈 리스트
+        self.mean_data_list = []
+        self.variance_data_list = []
 
     def init_widget(self):
         # 이미지 라벨
@@ -523,10 +526,9 @@ class FormWidget(QWidget):
         crop_area = (int(self.vertex_of_rect[0]), int(self.vertex_of_rect[1]), int(self.vertex_of_rect[2]), int(self.vertex_of_rect[3]))
         self.cropped_image = self.main_image.crop(crop_area)
         self.cropped_image = self.cropped_image.convert('L')
-        self.cropped_image.save('./sweep_images/{}'.format(self.vertex_of_rect[0]))
-        # Lists for plot
-        self.mean_data_list = []
-        self.variance_data_list = []
+        file_name = './sweep_images/{}.jpg'.format(self.vertex_of_rect[0])
+        self.cropped_image.save(file_name)
+        
         (mean, variance) = self.number_recognizer.predict_with_dropout(self.cropped_image)
         self.mean_data_list.append(mean)
         self.variance_data_list.append(variance)
@@ -540,6 +542,7 @@ class FormWidget(QWidget):
 
     def save_button_clicked(self):
         # 그래프 관련
+        print("whowowow")
         mean_zero = []
         mean_one = []
         mean_two = []
@@ -550,22 +553,23 @@ class FormWidget(QWidget):
         mean_seven = [] 
         mean_eight = []
         mean_nine = []
+        variance_zero = []
+        variance_one = []
+        variance_two = []
+        variance_three = []
+        variance_four = []
+        variance_five = []
+        variance_six = []
+        variance_seven = []
+        variance_eight = []
+        variance_nine = []
+        
+        data_length = len(self.mean_data_list)
 
-        if len(self.mean_data_list) == 1:
+        if data_length == 1:
             self.calculate_button_clicked()
         else:
-            for i in range(len(self.mean_data_list)):
-                mean_zero.append(self.mean_data_list[i][0])
-                mean_one.append(self.mean_data_list[i][1])
-                mean_two.append(self.mean_data_list[i][2])
-                mean_three.append(self.mean_data_list[i][3])
-                mean_four.append(self.mean_data_list[i][4])
-                mean_five.append(self.mean_data_list[i][5])
-                mean_six.append(self.mean_data_list[i][6])
-                mean_seven.append(self.mean_data_list[i][7])
-                mean_eight.append(self.mean_data_list[i][8])
-                mean_nine.append(self.mean_data_list[i][9])
-                
+            for i in range(data_length):
                 mean_zero.append(self.mean_data_list[i][0])
                 mean_one.append(self.mean_data_list[i][1])
                 mean_two.append(self.mean_data_list[i][2])
@@ -577,26 +581,52 @@ class FormWidget(QWidget):
                 mean_eight.append(self.mean_data_list[i][8])
                 mean_nine.append(self.mean_data_list[i][9])
 
-        index
+                # 그래프를 위한 분산 축소
+                reduction_ratio = 5
+                variance_zero.append(self.mean_data_list[i][0] / reduction_ratio)
+                variance_one.append(self.mean_data_list[i][1] / reduction_ratio)
+                variance_two.append(self.mean_data_list[i][2] / reduction_ratio)
+                variance_three.append(self.mean_data_list[i][3] / reduction_ratio)
+                variance_four.append(self.mean_data_list[i][4] / reduction_ratio)
+                variance_five.append(self.mean_data_list[i][5] / reduction_ratio)
+                variance_six.append(self.mean_data_list[i][6] / reduction_ratio)
+                variance_seven.append(self.mean_data_list[i][7] / reduction_ratio)
+                variance_eight.append(self.mean_data_list[i][8] / reduction_ratio)
+                variance_nine.append(self.mean_data_list[i][9] / reduction_ratio)
+
+        x_range = range(data_length)
+
         ax = self.fig.add_subplot(1, 1, 1)
-        index = np.arange(n_groups)
-
-        # 막대 사이의 거리
-        bar_width = 0.3
 
         # 막대 그래프
-        rect1 = ax.bar(0, mean_first_number, bar_width, yerr=var_first_number, capsize=3, ecolor='r', label='First')
-        rect2 = ax.bar(1, mean_second_number, bar_width, yerr=var_second_number, capsize=3, ecolor='r', label='Second')
-        rect3 = ax.bar(2, mean_third_number, bar_width, yerr=var_third_number, capsize=3, ecolor='r', label='Third')
+        error_bar_zero = ax.errorbar(x_range, mean_zero, yerr=(variance_zero), fmt='o', ecolor='orangered', color='orangered', label='Zero')
+        error_bar_one = ax.errorbar(x_range, mean_one, yerr=(variance_one), fmt='o', ecolor='orangered', color='darkorange', label='One')
+        error_bar_two = ax.errorbar(x_range, mean_two, yerr=(variance_two), fmt='o', ecolor='orangered', color='gold', label='Two')
+        error_bar_three = ax.errorbar(x_range, mean_three, yerr=(variance_three), fmt='o', ecolor='orangered', color='yellowgreen', label='Three')
+        error_bar_four = ax.errorbar(x_range, mean_four, yerr=(variance_four), fmt='o', ecolor='orangered', color='seagreen', label='Four')
+        error_bar_five = ax.errorbar(x_range, mean_five, yerr=(variance_five), fmt='o', ecolor='orangered', color='lightseagreen', label='Five')
+        error_bar_six = ax.errorbar(x_range, mean_six, yerr=(variance_six), fmt='o', ecolor='orangered', color='steelblue', label='Six')
+        error_bar_seven = ax.errorbar(x_range, mean_seven, yerr=(variance_seven), fmt='o', ecolor='orangered', color='darkblue', label='Seven')
+        error_bar_eight = ax.errorbar(x_range, mean_eight, yerr=(variance_eight), fmt='o', ecolor='orangered', color='darkviolet', label='Eight')
+        error_bar_nine = ax.errorbar(x_range, mean_nine, yerr=(variance_nine), fmt='o', ecolor='orangered', color='deeppink', label='Nine')
+
         ax.set_xlabel('Number')
         ax.set_ylabel('Softmax result')
         ax.set_title('Uncertainty')
-        ax.set_xticks(index)
-        x_labels = [first_number, second_number, third_number]
-        ax.set_xticklabels(x_labels)
+        ax.set_xticks(x_range)
+        ax.set_xticklabels(x_range)
+        ax.set_ylim([0, 1])
         ax.legend()
         self.canvas.draw()
         ax.clear()
+
+        sweep_area = (0, 0, int(self.vertex_of_rect[2]), int(self.vertex_of_rect[3]))
+        main_image = Image.open(self.main_image_path)
+        self.sweeped_image = main_image.crop(sweep_area)
+        # self.sweeped_image = self.sweeped_image.convert('L')
+        file_name = './sweep_images_full/.jpg'
+        self.cropped_image.save(file_name)
+        self.sweeped_image.show()
 
     def calculate_button_clicked(self):
         # 시간 측정
@@ -629,9 +659,11 @@ class FormWidget(QWidget):
         self.text.append("1st = {}".format(first_number))
         self.text.append("Mean = {0:.4f}".format(mean_first_number))
         self.text.append("Variance = {0:.4f}".format(var_first_number))
+        self.text.append("-------------------------------------")
         self.text.append("2nd = {}".format(second_number))
         self.text.append("Mean = {0:.4f}".format(mean_second_number))
         self.text.append("Variance = {0:.4f}".format(var_second_number))
+        self.text.append("-------------------------------------")
         self.text.append("3rd = {}".format(third_number))
         self.text.append("Mean = {0:.4f}".format(mean_third_number))
         self.text.append("Variance = {0:.4f}".format(var_third_number))
